@@ -1,0 +1,77 @@
+{
+  "expo": {
+    "name": "Luma Gen 1",
+    "slug": "luma-gen1",
+    "version": "1.3.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.luma.gen1",
+      "buildNumber": "1",
+      "infoPlist": {
+        "CFBundleDisplayName": "Luma Gen 1",
+        "CFBundleName": "Luma Gen 1",
+        "NSUserTrackingUsageDescription": "This app uses tracking to provide personalized Gen 1 AI features and improve your experience.",
+        "NSCameraUsageDescription": "This app uses camera for live streaming, photo creation, and Gen 1 AI features.",
+        "NSPhotoLibraryUsageDescription": "This app accesses photos for content creation and Gen 1 AI features.",
+        "NSMicrophoneUsageDescription": "This app uses microphone for live streaming and voice interactions.",
+        "NSLocationWhenInUseUsageDescription": "This app uses location for personalized Gen 1 AI features and content recommendations."
+      }
+    },
+    "android": {
+      "package": "com.luma.gen1",
+      "versionCode": 1,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "edgeToEdgeEnabled": true,
+      "permissions": [
+        "CAMERA",
+        "RECORD_AUDIO",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE",
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION",
+        "INTERNET",
+        "ACCESS_NETWORK_STATE"
+      ]
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "releaseDate": "2025",
+      "isDevelopment": true,
+      "developmentPhase": "beta",
+      "gen2Launch": {
+        "preRegistration": "Q2 2025",
+        "closedBeta": "Q3 2025",
+        "openBeta": "Q4 2025",
+        "officialLaunch": "Q1 2026"
+      },
+      "preregistration": {
+        "enabled": true,
+        "apiUrl": "https://luma-api-backend.netlify.app/api/preregistration"
+      },
+      "ai": {
+        "enabled": true,
+        "apiUrl": "https://luma-api-backend.netlify.app/api/ai"
+      },
+      "updateServer": {
+        "apiUrl": "https://luma-api-backend.netlify.app/api/updates"
+      },
+      "updates": {
+        "fallbackToCacheTimeout": 0
+      }
+    }
+  }
+}

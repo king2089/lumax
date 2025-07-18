@@ -1,0 +1,36 @@
+{
+  "name": "luma-update-server",
+  "version": "1.0.0",
+  "description": "Backend update server for Luma Gen 1 mobile app",
+  "main": "update-server.js",
+  "scripts": {
+    "start": "node update-server.js",
+    "dev": "nodemon update-server.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "vercel-build": "echo 'Build completed'",
+    "build": "echo 'No build step required'"
+  },
+  "keywords": [
+    "luma",
+    "gen1",
+    "updates",
+    "mobile",
+    "react-native",
+    "expo"
+  ],
+  "author": "Luma Team",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "helmet": "^7.1.0",
+    "morgan": "^1.10.0",
+    "compression": "^1.7.4"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+} 

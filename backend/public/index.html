@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Luma Gen 2 – Pre-registration & AI Platform</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Inter', Arial, sans-serif;
+      background: linear-gradient(120deg, #f8fafc 0%, #e0e7ff 100%);
+      margin: 0;
+      color: #222;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 32px 16px 64px 16px;
+    }
+    .hero {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+    .logo {
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: #764ba2;
+      margin-bottom: 8px;
+      letter-spacing: -1px;
+    }
+    .subtitle {
+      font-size: 1.2rem;
+      color: #4f4f4f;
+      margin-bottom: 24px;
+    }
+    .cta-btn {
+      background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+      color: #fff;
+      font-size: 1.1rem;
+      font-weight: 700;
+      padding: 16px 36px;
+      border: none;
+      border-radius: 32px;
+      cursor: pointer;
+      margin-bottom: 16px;
+      box-shadow: 0 2px 8px rgba(118,75,162,0.08);
+      transition: background 0.2s;
+    }
+    .cta-btn:hover {
+      background: linear-gradient(90deg, #764ba2 0%, #667eea 100%);
+    }
+    .form-section {
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 2px 12px rgba(118,75,162,0.08);
+      padding: 32px 24px 24px 24px;
+      max-width: 420px;
+      margin: 0 auto 32px auto;
+      text-align: left;
+    }
+    .form-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #764ba2;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+    .form-group {
+      margin-bottom: 18px;
+    }
+    .form-label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: #444;
+    }
+    .form-input {
+      width: 100%;
+      padding: 12px 10px;
+      border: 1.5px solid #d1d5db;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-family: inherit;
+      margin-bottom: 2px;
+      background: #f8fafc;
+      transition: border 0.2s;
+    }
+    .form-input:focus {
+      border-color: #764ba2;
+      outline: none;
+    }
+    .form-submit {
+      width: 100%;
+      background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+      color: #fff;
+      font-size: 1.1rem;
+      font-weight: 700;
+      padding: 12px 0;
+      border: none;
+      border-radius: 32px;
+      cursor: pointer;
+      margin-top: 8px;
+      box-shadow: 0 2px 8px rgba(118,75,162,0.08);
+      transition: background 0.2s;
+    }
+    .form-submit:hover {
+      background: linear-gradient(90deg, #764ba2 0%, #667eea 100%);
+    }
+    .form-message {
+      margin-top: 12px;
+      font-size: 1.05rem;
+      text-align: center;
+      font-weight: 600;
+    }
+    .form-message.success { color: #22b573; }
+    .form-message.error { color: #e53935; }
+    .section {
+      margin-bottom: 48px;
+    }
+    .section-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #764ba2;
+      margin-bottom: 16px;
+    }
+    .features-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    .feature {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 1px 4px rgba(118,75,162,0.06);
+      padding: 18px 20px;
+      flex: 1 1 220px;
+      min-width: 180px;
+      max-width: 260px;
+      margin-bottom: 8px;
+    }
+    .timeline {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 1px 4px rgba(118,75,162,0.06);
+      padding: 20px 24px;
+      margin-bottom: 16px;
+    }
+    .timeline-item {
+      margin-bottom: 18px;
+    }
+    .timeline-date {
+      font-weight: 700;
+      color: #667eea;
+      margin-right: 8px;
+    }
+    .api-link {
+      color: #764ba2;
+      text-decoration: none;
+      font-weight: 600;
+      margin-right: 16px;
+    }
+    .api-link:hover {
+      text-decoration: underline;
+    }
+    .footer {
+      text-align: center;
+      color: #888;
+      font-size: 0.95rem;
+      margin-top: 48px;
+    }
+    @media (max-width: 600px) {
+      .features-list { flex-direction: column; }
+      .feature { max-width: 100%; }
+      .timeline { padding: 12px 8px; }
+      .form-section { padding: 18px 6px 12px 6px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="hero">
+      <div class="logo">🚀 Luma Gen 2</div>
+      <div class="subtitle">The next-generation AI-powered social platform.<br>Pre-register now for early access and exclusive benefits!</div>
+    </div>
+
+    <div class="form-section" id="prereg">
+      <div class="form-title">Pre-register for Early Access</div>
+      <form id="preregForm" autocomplete="off">
+        <div class="form-group">
+          <label class="form-label" for="name">Name</label>
+          <input class="form-input" type="text" id="name" name="name" required maxlength="64" placeholder="Your Name" />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="email">Email</label>
+          <input class="form-input" type="email" id="email" name="email" required maxlength="128" placeholder="you@email.com" />
+        </div>
+        <button class="form-submit" type="submit">Pre-register Now</button>
+        <div id="formMessage" class="form-message"></div>
+      </form>
+    </div>
+
+    <div style="text-align:center; margin-bottom:32px;">
+      <a href="#features" class="api-link">Learn More</a>
+      <a href="/" class="api-link">API Docs</a>
+    </div>
+
+    <div class="section" id="about">
+      <div class="section-title">About Luma Gen 2</div>
+      <p>Luma Gen 2 is a revolutionary platform combining AI-powered content creation, live streaming, and community building. Join our early access program to help shape the future of social networking and unlock exclusive founder benefits.</p>
+    </div>
+
+    <div class="section" id="features">
+      <div class="section-title">Key Features</div>
+      <div class="features-list">
+        <div class="feature"><b>AI Content Creation</b><br>Automated, smart content tools for creators and users.</div>
+        <div class="feature"><b>Live Streaming</b><br>High-quality, interactive live video and events.</div>
+        <div class="feature"><b>Marketplace</b><br>Sell digital & physical products, monetize your audience.</div>
+        <div class="feature"><b>Music Studio</b><br>AI-powered music creation, artist profiles, and live sessions.</div>
+        <div class="feature"><b>Creator Hub</b><br>Advanced analytics, growth tools, and brand partnerships.</div>
+        <div class="feature"><b>Safety & Privacy</b><br>Granular controls, content moderation, and secure payments.</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Development Timeline</div>
+      <div class="timeline">
+        <div class="timeline-item"><span class="timeline-date">Q2 2025</span>Pre-registration & Early Access (NOW)</div>
+        <div class="timeline-item"><span class="timeline-date">Q3 2025</span>Beta Launch – Core features for early adopters</div>
+        <div class="timeline-item"><span class="timeline-date">Q4 2025</span>Public Launch – Advanced AI, live streaming, monetization</div>
+        <div class="timeline-item"><span class="timeline-date">Q1 2026</span>Gen2 AI Platform – Next-gen AI, global expansion</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">API & Resources</div>
+      <a href="/api/health" class="api-link">Health Check</a>
+      <a href="/api/preregistration/stats" class="api-link">Pre-registration Stats</a>
+      <a href="/api/ai/future" class="api-link">Luma AI Future</a>
+      <a href="/api/ai/timeline" class="api-link">Timeline API</a>
+      <a href="/api/ai/features" class="api-link">Features API</a>
+    </div>
+
+    <div class="footer">
+      &copy; 2025 Luma Gen 2 &mdash; Built with ❤️ for the future of creators.<br>
+      <span style="font-size:0.95em;">Questions? Contact us at <a href="mailto:hello@lumagen2.com">hello@lumagen2.com</a></span>
+    </div>
+  </div>
+  <script>
+    const form = document.getElementById('preregForm');
+    const msg = document.getElementById('formMessage');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      msg.textContent = '';
+      msg.className = 'form-message';
+      const name = form.name.value.trim();
+      const email = form.email.value.trim();
+      if (!name || !email) {
+        msg.textContent = 'Please enter your name and email.';
+        msg.classList.add('error');
+        return;
+      }
+      msg.textContent = 'Submitting...';
+      try {
+        const res = await fetch('/api/preregistration/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email })
+        });
+        const data = await res.json();
+        if (res.ok && data.success) {
+          msg.textContent = '✅ Pre-registration successful! Check your email for updates.';
+          msg.classList.add('success');
+          form.reset();
+        } else {
+          msg.textContent = data.message || 'Registration failed. Please try again.';
+          msg.classList.add('error');
+        }
+      } catch (err) {
+        msg.textContent = 'Network error. Please try again.';
+        msg.classList.add('error');
+      }
+    });
+  </script>
+</body>
+</html> 
