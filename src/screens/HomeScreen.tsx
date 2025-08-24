@@ -1975,7 +1975,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginRight: 12,
   },
-  notificationContent: {
+  postUserDetails: {
+    marginLeft: scale(12),
     flex: 1,
   },
   notificationTitle: {
