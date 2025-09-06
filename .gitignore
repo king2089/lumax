@@ -1,4 +1,30 @@
 .vercel
 
+# Expo
+.expo/
+
 # Local Netlify folder
 .netlify
+node_modules
+
+# Native build folders
+android/
+ios/
+node_modules
+node_modules
+node_modules
+node_modules
+node_modules
+node_modules
+node_modules
+node_modules
+node_modules
+node_modules
+node_modules
+node_modules
+node_modules
+node_modules
+node_modules
+node_modules
+node_modules
+node_modules
