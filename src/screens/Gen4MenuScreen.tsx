@@ -189,59 +189,92 @@ export const Gen4MenuScreen: React.FC = () => {
 
   const renderFeaturedFeatures = () => (
     <View style={styles.categoryContent}>
-      <Text style={styles.categoryDescription}>
-        Discover the most powerful Gen4 features and tools - Coming Soon in the next update!
-      </Text>
+      <View style={styles.categoryHeader}>
+        <Text style={styles.categoryTitle}>🌟 Featured Gen4 Features</Text>
+        <Text style={styles.categoryDescription}>
+          Discover the most powerful Gen4 features and tools - Coming Soon in the next update!
+        </Text>
+      </View>
       
       <View style={styles.featuresGrid}>
         <TouchableOpacity 
-          style={styles.featureCard}
+          style={[styles.featureCard, styles.premiumCard]}
           onPress={handleLumaAIPress}
         >
           <LinearGradient
             colors={['#FF4081', '#E91E63']}
             style={styles.featureGradient}
           >
-            <View style={styles.featureBadge}>
-              <Text style={styles.featureBadgeText}>1</Text>
+            <View style={styles.featureHeader}>
+              <View style={styles.featureBadge}>
+                <Text style={styles.featureBadgeText}>1</Text>
+              </View>
+              <View style={styles.enhancedPremiumBadge}>
+                <Text style={styles.enhancedPremiumBadgeText}>PREMIUM</Text>
+              </View>
             </View>
-            <Ionicons name="sparkles" size={quantumScale(32)} color="#fff" />
-            <Text style={styles.featureTitle}>Luma AI</Text>
-            <Text style={styles.featureDescription}>Advanced AI Assistant</Text>
+            <View style={styles.featureIconContainer}>
+              <Ionicons name="sparkles" size={quantumScale(32)} color="#fff" />
+            </View>
+            <View style={styles.featureContent}>
+              <Text style={styles.featureTitle}>Luma AI</Text>
+              <Text style={styles.featureDescription}>Advanced AI Assistant</Text>
+              <Text style={styles.featureStatus}>Coming Soon</Text>
+            </View>
           </LinearGradient>
         </TouchableOpacity>
 
         <TouchableOpacity 
-          style={styles.featureCard}
+          style={[styles.featureCard, styles.creativeCard]}
           onPress={() => handleFeaturePress('Neural Music Studio', 'AI-powered music creation with brain-computer interface integration')}
         >
           <LinearGradient
             colors={['#9C27B0', '#6A1B9A']}
             style={styles.featureGradient}
           >
-            <View style={styles.featureBadge}>
-              <Text style={styles.featureBadgeText}>2</Text>
+            <View style={styles.featureHeader}>
+              <View style={styles.featureBadge}>
+                <Text style={styles.featureBadgeText}>2</Text>
+              </View>
+              <View style={styles.creativeBadge}>
+                <Text style={styles.creativeBadgeText}>CREATIVE</Text>
+              </View>
             </View>
-            <Ionicons name="musical-notes" size={quantumScale(32)} color="#fff" />
-            <Text style={styles.featureTitle}>Neural Music</Text>
-            <Text style={styles.featureDescription}>AI Music Creation</Text>
+            <View style={styles.featureIconContainer}>
+              <Ionicons name="musical-notes" size={quantumScale(32)} color="#fff" />
+            </View>
+            <View style={styles.featureContent}>
+              <Text style={styles.featureTitle}>Neural Music</Text>
+              <Text style={styles.featureDescription}>AI Music Creation</Text>
+              <Text style={styles.featureStatus}>Coming Soon</Text>
+            </View>
           </LinearGradient>
         </TouchableOpacity>
 
         <TouchableOpacity 
-          style={styles.featureCard}
+          style={[styles.featureCard, styles.monetizationCard]}
           onPress={() => handleFeaturePress('Luma Partnership Program', 'Post NSFW videos and get paid through our exclusive partnership program')}
         >
           <LinearGradient
             colors={['#FF5722', '#E64A19']}
             style={styles.featureGradient}
           >
-            <View style={styles.featureBadge}>
-              <Text style={styles.featureBadgeText}>3</Text>
+            <View style={styles.featureHeader}>
+              <View style={styles.featureBadge}>
+                <Text style={styles.featureBadgeText}>3</Text>
+              </View>
+              <View style={styles.monetizationBadge}>
+                <Text style={styles.monetizationBadgeText}>EARN</Text>
+              </View>
             </View>
-            <Ionicons name="cash" size={quantumScale(32)} color="#fff" />
-            <Text style={styles.featureTitle}>Partnership</Text>
-            <Text style={styles.featureDescription}>NSFW Videos & Get Paid</Text>
+            <View style={styles.featureIconContainer}>
+              <Ionicons name="cash" size={quantumScale(32)} color="#fff" />
+            </View>
+            <View style={styles.featureContent}>
+              <Text style={styles.featureTitle}>Partnership</Text>
+              <Text style={styles.featureDescription}>NSFW Videos & Get Paid</Text>
+              <Text style={styles.featureStatus}>Coming Soon</Text>
+            </View>
           </LinearGradient>
         </TouchableOpacity>
 
@@ -1655,6 +1688,84 @@ const styles = StyleSheet.create({
     fontSize: quantumScale(10),
     color: 'rgba(255,255,255,0.7)',
     fontWeight: '600',
+  },
+  // Enhanced Layout Styles
+  categoryHeader: {
+    marginBottom: quantumScale(20),
+    alignItems: 'center',
+  },
+  categoryTitle: {
+    fontSize: quantumScale(24),
+    fontWeight: 'bold',
+    color: '#fff',
+    marginBottom: quantumScale(8),
+    textAlign: 'center',
+  },
+  featureHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: quantumScale(12),
+  },
+  featureIconContainer: {
+    alignItems: 'center',
+    marginBottom: quantumScale(12),
+  },
+  featureContent: {
+    alignItems: 'center',
+  },
+  featureStatus: {
+    fontSize: quantumScale(12),
+    color: 'rgba(255,255,255,0.8)',
+    fontStyle: 'italic',
+    marginTop: quantumScale(4),
+  },
+  // Card Type Styles
+  premiumCard: {
+    borderWidth: 2,
+    borderColor: '#FFD700',
+  },
+  creativeCard: {
+    borderWidth: 2,
+    borderColor: '#9C27B0',
+  },
+  monetizationCard: {
+    borderWidth: 2,
+    borderColor: '#FF5722',
+  },
+  // Badge Styles
+  enhancedPremiumBadge: {
+    backgroundColor: '#FFD700',
+    paddingHorizontal: quantumScale(8),
+    paddingVertical: quantumScale(4),
+    borderRadius: quantumScale(12),
+  },
+  enhancedPremiumBadgeText: {
+    fontSize: quantumScale(10),
+    fontWeight: 'bold',
+    color: '#000',
+  },
+  creativeBadge: {
+    backgroundColor: '#9C27B0',
+    paddingHorizontal: quantumScale(8),
+    paddingVertical: quantumScale(4),
+    borderRadius: quantumScale(12),
+  },
+  creativeBadgeText: {
+    fontSize: quantumScale(10),
+    fontWeight: 'bold',
+    color: '#fff',
+  },
+  monetizationBadge: {
+    backgroundColor: '#FF5722',
+    paddingHorizontal: quantumScale(8),
+    paddingVertical: quantumScale(4),
+    borderRadius: quantumScale(12),
+  },
+  monetizationBadgeText: {
+    fontSize: quantumScale(10),
+    fontWeight: 'bold',
+    color: '#fff',
   },
 });
 
