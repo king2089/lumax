@@ -568,23 +568,25 @@ export const RegisterScreen: React.FC = () => {
               </LinearGradient>
             </TouchableOpacity>
 
-            {/* Quick Register Button */}
-            <TouchableOpacity 
-              style={styles.quickRegisterButton}
-              onPress={handleQuickRegister}
-              disabled={isLoading}
-              activeOpacity={0.8}
-            >
-              <LinearGradient
-                colors={['#4CAF50', '#388E3C']}
-                style={styles.quickRegisterButtonGradient}
+            {/* Quick Register Button - Developer Only */}
+            {__DEV__ && (
+              <TouchableOpacity 
+                style={styles.quickRegisterButton}
+                onPress={handleQuickRegister}
+                disabled={isLoading}
+                activeOpacity={0.8}
               >
-                <Text style={styles.quickRegisterButtonText}>
-                  {isLoading ? 'Creating Demo...' : 'Quick Register (Demo)'}
-                </Text>
-                <Ionicons name="flash" size={quantumScale(20)} color="#fff" />
-              </LinearGradient>
-            </TouchableOpacity>
+                <LinearGradient
+                  colors={['#4CAF50', '#388E3C']}
+                  style={styles.quickRegisterButtonGradient}
+                >
+                  <Text style={styles.quickRegisterButtonText}>
+                    {isLoading ? 'Creating Demo...' : 'Quick Register (Demo) - Dev Only'}
+                  </Text>
+                  <Ionicons name="flash" size={quantumScale(20)} color="#fff" />
+                </LinearGradient>
+              </TouchableOpacity>
+            )}
 
             {/* Login Link */}
             <TouchableOpacity 
