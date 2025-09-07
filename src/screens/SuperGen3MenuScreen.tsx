@@ -779,7 +779,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: scale(15),
-    paddingVertical: scale(12),
+    paddingVertical: Platform.OS === 'android' ? scale(8) : scale(12), // Reduced padding for Android
     borderBottomWidth: 1,
     borderBottomColor: 'rgba(255,255,255,0.1)',
   },

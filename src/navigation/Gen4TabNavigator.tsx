@@ -212,7 +212,7 @@ const styles = StyleSheet.create({
   contentContainer: {
     flex: 1,
     paddingBottom: Platform.OS === 'ios' ? quantumScale(110) : quantumScale(110), // Increased padding for Android tab bar
-    paddingTop: Platform.OS === 'ios' ? quantumScale(20) : quantumScale(15), // Increased top padding for Android status bar
+    paddingTop: Platform.OS === 'ios' ? quantumScale(20) : quantumScale(8), // Reduced top padding for Android
   },
   tabBarWrapper: {
     position: 'absolute',

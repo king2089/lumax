@@ -1175,7 +1175,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    paddingTop: isIOS ? 0 : StatusBar.currentHeight,
+    paddingTop: isIOS ? 0 : (isAndroid ? StatusBar.currentHeight * 0.5 : StatusBar.currentHeight), // Reduced padding for Android
   },
   headerGradient: {
     flexDirection: 'row',

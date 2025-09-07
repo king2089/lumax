@@ -1433,7 +1433,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: quantumScale(20),
-    paddingTop: quantumScale(60),
+    paddingTop: Platform.OS === 'android' ? quantumScale(30) : quantumScale(60),
     paddingBottom: quantumScale(20),
   },
   headerLeft: {
