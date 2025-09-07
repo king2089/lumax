@@ -1,8 +1,8 @@
 {
   "expo": {
     "name": "Luma Gen5 - Revolutionary Social Media",
-    "slug": "luma-gen5",
-    "version": "5.0.0",
+    "slug": "luma-gen1",
+    "version": "4.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "dark",
@@ -17,7 +17,7 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.luma.gen5",
-      "buildNumber": "5.0.0",
+      "buildNumber": "4.0.0",
       "infoPlist": {
         "NSPhotoLibraryUsageDescription": "Luma Gen3 needs access to your photo library to upload images and create holographic content.",
         "NSCameraUsageDescription": "Luma Gen3 needs access to your camera to capture photos and videos for the holographic social network.",
@@ -46,7 +46,7 @@
         "backgroundColor": "#000011"
       },
       "package": "com.luma.gen5",
-      "versionCode": 50,
+      "versionCode": 40,
       "permissions": [
         "CAMERA",
         "READ_EXTERNAL_STORAGE",
@@ -95,6 +95,9 @@
     },
     "runtimeVersion": {
       "policy": "sdkVersion"
+    },
+    "cli": {
+      "appVersionSource": "remote"
     }
   }
 }
