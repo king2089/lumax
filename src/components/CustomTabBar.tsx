@@ -57,7 +57,7 @@ export const CustomTabBar: React.FC<BottomTabBarProps> = ({ state, descriptors, 
             accessibilityRole="button"
             accessibilityState={isFocused ? { selected: true } : {}}
             accessibilityLabel={options.tabBarAccessibilityLabel}
-            testID={options.tabBarTestID}
+
             onPress={onPress}
             onLongPress={onLongPress}
             style={isCenter ? styles.centerTab : styles.tab}
@@ -78,45 +78,45 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     alignItems: 'center',
     position: 'absolute',
-    left: 16,
-    right: 16,
-    bottom: Platform.OS === 'android' ? 24 : 32,
+    left: Platform.OS === 'android' ? 12 : 16, // More margin for Android
+    right: Platform.OS === 'android' ? 12 : 16, // More margin for Android
+    bottom: Platform.OS === 'android' ? 20 : 32, // Lower for Android navigation bar
     backgroundColor: 'white',
-    borderRadius: 32,
-    height: 64,
+    borderRadius: Platform.OS === 'android' ? 35 : 32, // Larger radius for Android
+    height: Platform.OS === 'android' ? 70 : 64, // Taller for Android
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.12,
     shadowRadius: 12,
-    elevation: 8,
+    elevation: Platform.OS === 'android' ? 12 : 8, // Higher elevation for Android
     zIndex: 100,
   },
   tab: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 8,
+    paddingVertical: Platform.OS === 'android' ? 10 : 8, // More padding for Android
   },
   centerTab: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 0,
-    marginTop: -18,
+    marginTop: Platform.OS === 'android' ? -20 : -18, // More margin for Android
     backgroundColor: '#f0f4ff',
-    borderRadius: 32,
-    width: 64,
-    height: 64,
+    borderRadius: Platform.OS === 'android' ? 35 : 32, // Larger radius for Android
+    width: Platform.OS === 'android' ? 70 : 64, // Larger for Android
+    height: Platform.OS === 'android' ? 70 : 64, // Larger for Android
     shadowColor: '#1877f2',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.18,
     shadowRadius: 8,
-    elevation: 12,
+    elevation: Platform.OS === 'android' ? 15 : 12, // Higher elevation for Android
   },
   label: {
-    fontSize: 11,
+    fontSize: Platform.OS === 'android' ? 12 : 11, // Larger font for Android
     color: '#65676b',
-    marginTop: 2,
+    marginTop: Platform.OS === 'android' ? 3 : 2, // More margin for Android
   },
   labelFocused: {
     color: '#1877f2',
