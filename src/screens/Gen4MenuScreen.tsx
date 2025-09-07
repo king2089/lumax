@@ -214,7 +214,7 @@ export const Gen4MenuScreen: React.FC = () => {
               </View>
             </View>
             <View style={styles.featureIconContainer}>
-              <Ionicons name="sparkles" size={quantumScale(32)} color="#fff" />
+              <Ionicons name="sparkles" size={quantumScale(24)} color="#fff" />
             </View>
             <View style={styles.featureContent}>
               <Text style={styles.featureTitle}>Luma AI</Text>
@@ -241,7 +241,7 @@ export const Gen4MenuScreen: React.FC = () => {
               </View>
             </View>
             <View style={styles.featureIconContainer}>
-              <Ionicons name="musical-notes" size={quantumScale(32)} color="#fff" />
+              <Ionicons name="musical-notes" size={quantumScale(24)} color="#fff" />
             </View>
             <View style={styles.featureContent}>
               <Text style={styles.featureTitle}>Neural Music</Text>
@@ -268,7 +268,7 @@ export const Gen4MenuScreen: React.FC = () => {
               </View>
             </View>
             <View style={styles.featureIconContainer}>
-              <Ionicons name="cash" size={quantumScale(32)} color="#fff" />
+              <Ionicons name="cash" size={quantumScale(24)} color="#fff" />
             </View>
             <View style={styles.featureContent}>
               <Text style={styles.featureTitle}>Partnership</Text>
@@ -1493,30 +1493,31 @@ const styles = StyleSheet.create({
   },
   featureCard: {
     width: '48%',
-    borderRadius: quantumScale(16),
+    height: quantumScale(140),
+    borderRadius: quantumScale(12),
     overflow: 'hidden',
-    marginBottom: quantumScale(16),
-    elevation: 8,
+    marginBottom: quantumScale(12),
+    elevation: 4,
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
   },
   featureGradient: {
-    padding: quantumScale(20),
+    padding: quantumScale(12),
     alignItems: 'center',
-    gap: quantumScale(12),
+    gap: quantumScale(8),
     minHeight: quantumScale(140),
     justifyContent: 'center',
   },
   featureTitle: {
-    fontSize: quantumScale(16),
+    fontSize: quantumScale(14),
     fontWeight: 'bold',
     color: '#fff',
     textAlign: 'center',
   },
   featureDescription: {
-    fontSize: quantumScale(12),
+    fontSize: quantumScale(10),
     color: 'rgba(255,255,255,0.8)',
     textAlign: 'center',
   },
@@ -1705,11 +1706,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: quantumScale(12),
+    marginBottom: quantumScale(8),
   },
   featureIconContainer: {
     alignItems: 'center',
-    marginBottom: quantumScale(12),
+    marginBottom: quantumScale(8),
   },
   featureContent: {
     alignItems: 'center',
@@ -1736,34 +1737,34 @@ const styles = StyleSheet.create({
   // Badge Styles
   enhancedPremiumBadge: {
     backgroundColor: '#FFD700',
-    paddingHorizontal: quantumScale(8),
-    paddingVertical: quantumScale(4),
-    borderRadius: quantumScale(12),
+    paddingHorizontal: quantumScale(6),
+    paddingVertical: quantumScale(2),
+    borderRadius: quantumScale(8),
   },
   enhancedPremiumBadgeText: {
-    fontSize: quantumScale(10),
+    fontSize: quantumScale(8),
     fontWeight: 'bold',
     color: '#000',
   },
   creativeBadge: {
     backgroundColor: '#9C27B0',
-    paddingHorizontal: quantumScale(8),
-    paddingVertical: quantumScale(4),
-    borderRadius: quantumScale(12),
+    paddingHorizontal: quantumScale(6),
+    paddingVertical: quantumScale(2),
+    borderRadius: quantumScale(8),
   },
   creativeBadgeText: {
-    fontSize: quantumScale(10),
+    fontSize: quantumScale(8),
     fontWeight: 'bold',
     color: '#fff',
   },
   monetizationBadge: {
     backgroundColor: '#FF5722',
-    paddingHorizontal: quantumScale(8),
-    paddingVertical: quantumScale(4),
-    borderRadius: quantumScale(12),
+    paddingHorizontal: quantumScale(6),
+    paddingVertical: quantumScale(2),
+    borderRadius: quantumScale(8),
   },
   monetizationBadgeText: {
-    fontSize: quantumScale(10),
+    fontSize: quantumScale(8),
     fontWeight: 'bold',
     color: '#fff',
   },
