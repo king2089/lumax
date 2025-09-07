@@ -1,55 +1,53 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
   View,
   Text,
   TextInput,
   TouchableOpacity,
   StyleSheet,
-  Alert,
-  KeyboardAvoidingView,
-  Platform,
-  SafeAreaView,
-  Modal,
-  Animated,
-  ScrollView,
   Dimensions,
+  Platform,
+  StatusBar,
+  SafeAreaView,
+  KeyboardAvoidingView,
+  ScrollView,
+  Alert,
+  Vibration,
+  Animated,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Ionicons } from '@expo/vector-icons';
 import { useAuth } from '../context/AuthContext';
-import { User } from '../types';
-import { LumaMusicOnboarding } from '../components/LumaMusicOnboarding';
-import { useMusic } from '../context/MusicContext';
-import * as Linking from 'expo-linking';
-import { scale, responsiveStyle } from '../utils/responsive';
+import { scale } from '../utils/responsive';
 
 const { width, height } = Dimensions.get('window');
 
-export const AuthScreen: React.FC = () => {
-  const { loginWithCredentials, isLoading, error } = useAuth();
-  const { setUserMusicProfile } = useMusic();
-  const [isLogin, setIsLogin] = useState(true);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [username, setUsername] = useState('');
-  const [displayName, setDisplayName] = useState('');
-  const [showMusicOnboarding, setShowMusicOnboarding] = useState(false);
-  const [musicProfile, setMusicProfile] = useState(null);
-  const [rememberMe, setRememberMe] = useState(false);
+const quantumScale = (size: number) => scale(size);
+
+export default function AuthScreen() {
+  const { login, register } = useAuth();
+  const [neuralUsername, setNeuralUsername] = useState('');
+  const [consciousnessPassword, setConsciousnessPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [isArtistSignup, setIsArtistSignup] = useState(false);
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [age, setAge] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [showForgotPasswordModal, setShowForgotPasswordModal] = useState(false);
+  const [showSuperGen3Auth, setShowSuperGen3Auth] = useState(true);
+  
+  // Super Gen3 Signup States
+  const [isSignupMode, setIsSignupMode] = useState(false);
+  const [quantumEmail, setQuantumEmail] = useState('');
+  const [neuralSignature, setNeuralSignature] = useState('');
+  const [consciousnessLevel, setConsciousnessLevel] = useState('');
   const [isAgeVerified, setIsAgeVerified] = useState(false);
 
-  // Animation values
-  const fadeAnim = useState(new Animated.Value(0))[0];
-  const slideAnim = useState(new Animated.Value(50))[0];
-  const logoScale = useState(new Animated.Value(0.8))[0];
+  // Super Gen3 Animations
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const slideAnim = useRef(new Animated.Value(50)).current;
+  const glowAnim = useRef(new Animated.Value(0)).current;
+  const pulseAnim = useRef(new Animated.Value(1)).current;
 
   useEffect(() => {
-    // Animate in
+    // Start Super Gen3 animations
     Animated.parallel([
       Animated.timing(fadeAnim, {
         toValue: 1,
@@ -58,489 +56,411 @@ export const AuthScreen: React.FC = () => {
       }),
       Animated.timing(slideAnim, {
         toValue: 0,
-        duration: 800,
+        duration: 1000,
         useNativeDriver: true,
       }),
-      Animated.spring(logoScale, {
+      Animated.loop(
+        Animated.sequence([
+          Animated.timing(glowAnim, {
         toValue: 1,
-        tension: 100,
-        friction: 8,
+        duration: 2000,
         useNativeDriver: true,
       }),
+      Animated.timing(glowAnim, {
+            toValue: 0,
+            duration: 2000,
+        useNativeDriver: true,
+      }),
+        ])
+      ),
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(pulseAnim, {
+          toValue: 1.1,
+            duration: 1500,
+          useNativeDriver: true,
+        }),
+        Animated.timing(pulseAnim, {
+          toValue: 1,
+            duration: 1500,
+          useNativeDriver: true,
+        }),
+      ])
+      ),
     ]).start();
   }, []);
 
-  const validateForm = () => {
-    if (!email.trim()) {
-      Alert.alert('Error', 'Please enter your email address');
-      return false;
-    }
-    
-    if (!password.trim()) {
-      Alert.alert('Error', 'Please enter your password');
-      return false;
-    }
-
-    if (!isLogin) {
-      if (!username.trim()) {
-        Alert.alert('Error', 'Please enter a username');
-        return false;
-      }
-      
-      if (!displayName.trim()) {
-        Alert.alert('Error', 'Please enter your display name');
-        return false;
-      }
-
-      if (password.length < 8) {
-        Alert.alert('Error', 'Password must be at least 8 characters long');
-        return false;
-      }
-
-      if (password !== confirmPassword) {
-        Alert.alert('Error', 'Passwords do not match');
-        return false;
-      }
-
-      if (!isAgeVerified) {
-        Alert.alert('Error', 'Please verify your age (must be 18+)');
-        return false;
-      }
-    }
-
-    return true;
-  };
-
   const handleSubmit = async () => {
-    if (!validateForm()) return;
+    if (!neuralUsername.trim() || !consciousnessPassword.trim()) {
+      Vibration.vibrate([0, 100, 50, 100, 50, 100]);
+      Alert.alert(
+        '🌌 Missing Information', 
+        'Please enter both your neural username and consciousness password to proceed.',
+        [{ text: 'Understood', style: 'default' }]
+      );
+      return;
+    }
 
-    if (isLogin) {
-      await loginWithCredentials(email, password);
-    } else {
-      // Start the music onboarding flow for new signups
-      setShowMusicOnboarding(true);
+    Vibration.vibrate(100);
+    setIsLoading(true);
+
+    try {
+      console.log('🌌 [SUPER GEN3 LOGIN] Attempting login for:', neuralUsername);
+      await login(neuralUsername, consciousnessPassword);
+      
+      console.log('🌌 [SUPER GEN3 LOGIN] Login successful for:', neuralUsername);
+      Vibration.vibrate([0, 200, 100, 200]);
+      // Login popup removed - user is now logged in silently
+    } catch (error) {
+      console.warn('⚠️ [SUPER GEN3 LOGIN] Login failed:', error);
+      Vibration.vibrate([0, 100, 50, 100, 50, 100]);
+      // Login error handled silently - no popup
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const handleMusicOnboardingComplete = async (profile: any) => {
-    setMusicProfile(profile);
-    setUserMusicProfile(profile);
-    setShowMusicOnboarding(false);
-    
-    // Complete signup with music profile data
-    console.log('Signup:', { 
-      email, 
-      password, 
-      username, 
-      displayName,
-      musicProfile: profile
-    });
-    
-    // Show welcome bonus alert
-    Alert.alert(
-      '🎉 Welcome to Luma Gen 1!',
-      `Congratulations ${displayName}! You've received a $2,500 welcome bonus.\n\nYour funds are now available for use or payout to Apple Pay, Google Pay, or your bank account.`,
-      [
-        {
-          text: 'Claim Bonus',
-          onPress: () => {
-            // The bonus will be automatically claimed when they first access Luma Bank
-            alert(`✅ Welcome bonus claimed! $2,500 has been added to your Luma Bank balance.`);
-          }
-        },
-        {
-          text: 'Continue',
-          style: 'default'
-        }
-      ]
-    );
-  };
+  const handleSuperGen3Signup = async () => {
+    if (!neuralUsername.trim() || !consciousnessPassword.trim() || !quantumEmail.trim()) {
+      Vibration.vibrate([0, 100, 50, 100, 50, 100]);
+      // Validation error handled silently - no popup
+      return;
+    }
 
-  const handleMusicOnboardingSkip = async () => {
-    setShowMusicOnboarding(false);
-    
-    // Complete signup without music profile
-    console.log('Signup:', { email, password, username, displayName });
-    
-    // Show welcome bonus alert
-    Alert.alert(
-      '🎉 Welcome to Luma Gen 1!',
-      `Congratulations ${displayName}! You've received a $2,500 welcome bonus.\n\nYour funds are now available for use or payout to Apple Pay, Google Pay, or your bank account.`,
-      [
-        {
-          text: 'Claim Bonus',
-          onPress: () => {
-            // The bonus will be automatically claimed when they first access Luma Bank
-            alert(`✅ Welcome bonus claimed! $2,500 has been added to your Luma Bank balance.`);
-          }
-        },
-        {
-          text: 'Continue',
-          style: 'default'
-        }
-      ]
-    );
-  };
+    if (!isAgeVerified) {
+      Alert.alert('Age Verification Required', 'You must be 18 years or older to create an account on Luma. Please confirm your age to continue.');
+      return;
+    }
 
-  const handleTestLogin = async () => {
-    // Use the test account credentials
-    await loginWithCredentials('test@luma.go', 'test123');
-  };
+    Vibration.vibrate(100);
+    setIsLoading(true);
 
-  const handleSocialLogin = (provider: string) => {
-    Alert.alert(
-      `${provider} Login`,
-      `${provider} authentication will be implemented in Gen 2.`,
-      [{ text: 'OK' }]
-    );
-  };
+    try {
+      console.log('🌌 [SUPER GEN3 SIGNUP] Starting consciousness creation...');
+      console.log('🌌 [SUPER GEN3 SIGNUP] Username:', neuralUsername);
+      console.log('🌌 [SUPER GEN3 SIGNUP] Email:', quantumEmail);
+      
+      // Generate neural signature and consciousness level
+      const generatedNeuralSignature = `NS_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      const generatedConsciousnessLevel = Math.floor(Math.random() * 100) + 1;
+      
+      console.log('🌌 [SUPER GEN3 SIGNUP] Generated neural signature:', generatedNeuralSignature);
+      console.log('🌌 [SUPER GEN3 SIGNUP] Generated consciousness level:', generatedConsciousnessLevel);
+      
+      // Register with Luma network integration
+      const userData = {
+          username: neuralUsername,
+          password: consciousnessPassword,
+        email: quantumEmail,
+        neuralSignature: generatedNeuralSignature,
+        consciousnessLevel: generatedConsciousnessLevel,
+        quantumAccess: true,
+        lumaNetworkSync: true,
+        superGen3Features: true,
+        displayName: neuralUsername, // Add display name
+        profileSetupComplete: false, // New users need profile setup
+      };
+      
+      console.log('🌌 [SUPER GEN3 SIGNUP] Calling register with data:', userData);
+      console.log('🌌 [SUPER GEN3 SIGNUP] Register function called with:', {
+        username: userData.username,
+        email: userData.email,
+        neuralSignature: userData.neuralSignature,
+        consciousnessLevel: userData.consciousnessLevel,
+        profileSetupComplete: userData.profileSetupComplete
+      });
+      
+      await register(userData);
+      
+      console.log('🌌 [SUPER GEN3 SIGNUP] Register function completed successfully');
+      
+      console.log('🌌 [SUPER GEN3 SIGNUP] Registration successful!');
 
-  const handleForgotPassword = () => {
-    Alert.alert(
-      'Reset Password',
-      'Enter your email address and we\'ll send you a reset link.',
-      [
-        { text: 'Cancel', style: 'cancel' },
-        { text: 'Send Reset Link', onPress: () => Alert.alert('Sent!', 'Check your email for reset instructions.') },
-      ]
-    );
-  };
-
-  const handleAgeVerification = () => {
-    const ageNum = parseInt(age);
-    if (ageNum >= 18) {
-      setIsAgeVerified(true);
-      Alert.alert('Age Verified ✅', 'You are now verified to access Luma Gen 1.');
-    } else {
-      Alert.alert('Access Denied ❌', 'You must be 18 or older to access Luma Gen 1.');
+      Vibration.vibrate([0, 200, 100, 200]);
+      // Registration successful - no popup, user proceeds automatically
+    } catch (error) {
+      console.warn('⚠️ [SUPER GEN3 SIGNUP] Registration failed:', error);
+      Vibration.vibrate([0, 100, 50, 100, 50, 100]);
+      // Registration error handled silently - no popup
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const canSubmit = isLogin 
-    ? email.trim() && password.trim()
-    : email.trim() && password.trim() && username.trim() && displayName.trim() && confirmPassword.trim() && isAgeVerified;
+  const toggleAuthMode = () => {
+    setIsSignupMode(!isSignupMode);
+    Vibration.vibrate(50);
+  };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <LinearGradient
-        colors={['#667eea', '#764ba2', '#f093fb']}
-        style={styles.gradient}
+    <View style={styles.container}>
+      <StatusBar barStyle="light-content" backgroundColor="transparent" translucent />
+      
+      {/* Super Gen3 Quantum Background */}
+      <LinearGradient 
+        colors={['#0a0a2e', '#1a1a4e', '#2a2a6e', '#000']} 
+        style={styles.background}
       >
-        <KeyboardAvoidingView 
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-          style={styles.keyboardView}
-        >
-          <ScrollView 
-            contentContainerStyle={styles.scrollContent}
-            showsVerticalScrollIndicator={false}
+        <SafeAreaView style={styles.safeArea}>
+          <KeyboardAvoidingView 
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'} 
+            style={styles.keyboardView}
           >
-            <Animated.View 
-              style={[
-                styles.content,
-                {
-                  opacity: fadeAnim,
-                  transform: [{ translateY: slideAnim }]
-                }
-              ]}
+            <ScrollView 
+              contentContainerStyle={styles.scrollContent} 
+              showsVerticalScrollIndicator={false}
             >
-              {/* Logo Section */}
-              <Animated.View 
-                style={[
-                  styles.logoContainer,
-                  { transform: [{ scale: logoScale }] }
-                ]}
-              >
-            <View style={styles.logoIcon}>
-              <LinearGradient
-                colors={['#FF6B6B', '#4ECDC4', '#45B7D1']}
-                style={styles.logoGradient}
-              >
-                <Text style={styles.logoText}>L</Text>
-              </LinearGradient>
-            </View>
-                <Text style={styles.logo}>Luma Gen 1</Text>
-            <Text style={styles.tagline}>
-                  {isLogin ? 'Welcome back to the future' : 'Join the next generation'}
-                </Text>
-                <Text style={styles.subtitle}>
-                  {isLogin ? 'Sign in to continue your journey' : 'Create your account and start earning'}
-            </Text>
-              </Animated.View>
+              {/* Super Gen3 Header */}
+              <Animated.View style={[styles.header, { opacity: fadeAnim, transform: [{ translateY: slideAnim }] }]}>
+                <Animated.View style={[styles.logoContainer, { transform: [{ scale: pulseAnim }] }]}>
+                  <LinearGradient 
+                    colors={['#00D4FF', '#0099CC', '#FFD700', '#FF6B6B']} 
+                    style={styles.logoGradient}
+                  >
+                    <Ionicons name="infinite" size={quantumScale(50)} color="#fff" />
+                  </LinearGradient>
+                </Animated.View>
 
-          {/* Sign In / Sign Up Tabs */}
-              <View style={styles.tabContainer}>
-            <TouchableOpacity
-                  style={[styles.tab, isLogin && styles.activeTab]}
-              onPress={() => setIsLogin(true)}
-            >
-                  <Text style={[styles.tabText, isLogin && styles.activeTabText]}>
-                    Sign In
-                  </Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-                  style={[styles.tab, !isLogin && styles.activeTab]}
-              onPress={() => setIsLogin(false)}
-            >
-                  <Text style={[styles.tabText, !isLogin && styles.activeTabText]}>
-                    Sign Up
-                  </Text>
-            </TouchableOpacity>
-          </View>
+                <Animated.Text style={[styles.appName, { opacity: fadeAnim }]}>LUMA</Animated.Text>
+                <Animated.Text style={[styles.appVersion, { opacity: fadeAnim }]}>SUPER GEN3</Animated.Text>
+                <Animated.Text style={[styles.tagline, { opacity: fadeAnim }]}>Revolutionary Neural Interface</Animated.Text>
+                </Animated.View>
 
-              {/* Form */}
-          <View style={styles.formContainer}>
-              {!isLogin && (
-                <>
-                    <View style={styles.inputGroup}>
-                      <Ionicons name="person" size={20} color="#fff" style={styles.inputIcon} />
-                  <TextInput
-                    style={styles.input}
-                    placeholder="Display Name"
-                        placeholderTextColor="#ccc"
-                    value={displayName}
-                    onChangeText={setDisplayName}
-                    autoCapitalize="words"
-                  />
-                    </View>
+              {/* SUPER GEN3 AUTHENTICATION */}
+              {showSuperGen3Auth && (
+                <View style={styles.superGen3AuthContainer}>
+                  <LinearGradient
+                    colors={['rgba(0,255,136,0.4)', 'rgba(0,255,136,0.2)', 'rgba(0,255,136,0.1)']}
+                    style={styles.superGen3AuthGradient}
+                  >
+                    <Text style={styles.superGen3AuthTitle}>🌌 SUPER GEN3 AUTHENTICATION</Text>
+                    <Text style={styles.superGen3AuthSubtitle}>Revolutionary Neural Interface Login</Text>
                     
-                    <View style={styles.inputGroup}>
-                      <Ionicons name="at" size={20} color="#fff" style={styles.inputIcon} />
-                  <TextInput
-                    style={styles.input}
-                    placeholder="Username"
-                        placeholderTextColor="#ccc"
-                    value={username}
-                    onChangeText={setUsername}
-                    autoCapitalize="none"
-                  />
-                    </View>
-                </>
-              )}
-
-                <View style={styles.inputGroup}>
-                  <Ionicons name="mail" size={20} color="#fff" style={styles.inputIcon} />
-              <TextInput
-                style={styles.input}
-                placeholder="Email"
-                    placeholderTextColor="#ccc"
-                value={email}
-                onChangeText={setEmail}
-                keyboardType="email-address"
-                autoCapitalize="none"
-              />
-                </View>
-
-                <View style={styles.inputGroup}>
-                  <Ionicons name="lock-closed" size={20} color="#fff" style={styles.inputIcon} />
-                <TextInput
-                    style={styles.input}
-                  placeholder="Password"
-                    placeholderTextColor="#ccc"
-                  value={password}
-                  onChangeText={setPassword}
-                  secureTextEntry={!showPassword}
-                />
-                <TouchableOpacity
-                  style={styles.passwordToggle}
-                  onPress={() => setShowPassword(!showPassword)}
-                >
-                    <Ionicons 
-                      name={showPassword ? "eye-off" : "eye"} 
-                      size={20} 
-                      color="#fff" 
-                    />
-                </TouchableOpacity>
+                    {/* Super Gen3 Login Form */}
+                    <View style={styles.superGen3AuthForm}>
+                      <View style={styles.superGen3AuthInputContainer}>
+                  <LinearGradient
+                          colors={['rgba(0,212,255,0.2)', 'rgba(255,107,107,0.2)']}
+                          style={styles.superGen3AuthInputGradient}
+                        >
+                          <Ionicons name="person" size={quantumScale(20)} color="#00D4FF" />
+                          <TextInput
+                            style={styles.superGen3AuthInput}
+                            placeholder="Enter Neural Username"
+                            placeholderTextColor="rgba(255,255,255,0.6)"
+                            value={neuralUsername}
+                            onChangeText={setNeuralUsername}
+                            autoCorrect={false}
+                            autoComplete="username"
+                            textContentType="username"
+                            returnKeyType="next"
+                            blurOnSubmit={false}
+                            enablesReturnKeyAutomatically={true}
+                            clearButtonMode="while-editing"
+                            selectTextOnFocus={true}
+                          />
+                </LinearGradient>
               </View>
 
-              {!isLogin && (
-                  <>
-                    <View style={styles.inputGroup}>
-                      <Ionicons name="lock-closed" size={20} color="#fff" style={styles.inputIcon} />
-                      <TextInput
-                        style={styles.input}
-                        placeholder="Confirm Password"
-                        placeholderTextColor="#ccc"
-                        value={confirmPassword}
-                        onChangeText={setConfirmPassword}
-                        secureTextEntry={!showConfirmPassword}
-                      />
-                      <TouchableOpacity
-                        style={styles.passwordToggle}
-                        onPress={() => setShowConfirmPassword(!showConfirmPassword)}
-                      >
-                        <Ionicons 
-                          name={showConfirmPassword ? "eye-off" : "eye"} 
-                          size={20} 
-                          color="#fff" 
-                        />
-                      </TouchableOpacity>
-                    </View>
-
-                    {/* Age Verification */}
-                    <View style={styles.ageVerificationContainer}>
-                      <View style={styles.inputGroup}>
-                        <Ionicons name="calendar" size={20} color="#fff" style={styles.inputIcon} />
-                        <TextInput
-                          style={styles.input}
-                          placeholder="Age (18+)"
-                          placeholderTextColor="#ccc"
-                          value={age}
-                          onChangeText={setAge}
-                          keyboardType="numeric"
-                          maxLength={2}
-                        />
-                        <TouchableOpacity
-                          style={[styles.verifyButton, isAgeVerified && styles.verifiedButton]}
-                          onPress={handleAgeVerification}
+                      <View style={styles.superGen3AuthInputContainer}>
+                  <LinearGradient
+                          colors={['rgba(255,215,0,0.2)', 'rgba(156,39,176,0.2)']}
+                          style={styles.superGen3AuthInputGradient}
                         >
-                          <Ionicons 
-                            name={isAgeVerified ? "checkmark-circle" : "shield-checkmark"} 
-                            size={20} 
-                            color="#fff" 
-                          />
-                        </TouchableOpacity>
-                      </View>
-                      {isAgeVerified && (
-                        <Text style={styles.verifiedText}>✅ Age verified</Text>
+                          <Ionicons name="lock-closed" size={quantumScale(20)} color="#FFD700" />
+                  <TextInput
+                            style={styles.superGen3AuthInput}
+                            placeholder="Enter Consciousness Password"
+                            placeholderTextColor="rgba(255,255,255,0.6)"
+                    value={consciousnessPassword}
+                    onChangeText={setConsciousnessPassword}
+                    secureTextEntry={!showPassword}
+                            autoCorrect={false}
+                            autoComplete="password"
+                            textContentType="password"
+                            returnKeyType="done"
+                            blurOnSubmit={true}
+                            enablesReturnKeyAutomatically={true}
+                            clearButtonMode="while-editing"
+                            selectTextOnFocus={true}
+                  />
+                  <TouchableOpacity 
+                            style={styles.superGen3AuthEyeButton}
+                            onPress={() => setShowPassword(!showPassword)}
+                            activeOpacity={0.7}
+                            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                            pressRetentionOffset={{ top: 20, bottom: 20, left: 20, right: 20 }}
+                  >
+                    <Ionicons 
+                      name={showPassword ? "eye-off" : "eye"} 
+                      size={quantumScale(20)} 
+                              color="rgba(255,255,255,0.8)" 
+                    />
+                  </TouchableOpacity>
+                        </LinearGradient>
+                </View>
+
+                      {/* Super Gen3 Quantum Email Input (Signup Only) */}
+                      {isSignupMode && (
+                        <View style={styles.superGen3AuthInputContainer}>
+                          <LinearGradient
+                            colors={['rgba(255,107,107,0.2)', 'rgba(0,212,255,0.2)']}
+                            style={styles.superGen3AuthInputGradient}
+                          >
+                            <Ionicons name="mail" size={quantumScale(20)} color="#FF6B6B" />
+                      <TextInput
+                              style={styles.superGen3AuthInput}
+                              placeholder="Enter Quantum Email"
+                              placeholderTextColor="rgba(255,255,255,0.6)"
+                              value={quantumEmail}
+                              onChangeText={setQuantumEmail}
+                              autoCorrect={false}
+                              autoComplete="email"
+                              textContentType="emailAddress"
+                              returnKeyType="next"
+                              blurOnSubmit={false}
+                              enablesReturnKeyAutomatically={true}
+                              clearButtonMode="while-editing"
+                              selectTextOnFocus={true}
+                              keyboardType="email-address"
+                            />
+                          </LinearGradient>
+                    </View>
+                      )}
+
+                      {/* Super Gen3 Action Buttons */}
+                      {!isSignupMode ? (
+                        <>
+                          {/* Super Gen3 Login Button */}
+                      <TouchableOpacity
+                            style={styles.superGen3AuthLoginButton}
+                            onPress={handleSubmit}
+                            disabled={isLoading}
+                            activeOpacity={0.8}
+                            hitSlop={{ top: 15, bottom: 15, left: 15, right: 15 }}
+                            pressRetentionOffset={{ top: 30, bottom: 30, left: 30, right: 30 }}
+                      >
+                        <LinearGradient
+                              colors={['#00D4FF', '#FF6B6B', '#FFD700', '#00FF88']}
+                              style={styles.superGen3AuthLoginGradient}
+                            >
+                              <Ionicons name="rocket" size={quantumScale(24)} color="#fff" />
+                              <Text style={styles.superGen3AuthLoginText}>
+                                🚀 SUPER GEN3 NEURAL SYNC
+                          </Text>
+                        </LinearGradient>
+                      </TouchableOpacity>
+
+                          {/* Super Gen3 Forgot Password */}
+                    <TouchableOpacity
+                            style={styles.superGen3AuthForgotButton}
+                            onPress={() => setShowForgotPasswordModal(true)}
+                            activeOpacity={0.7}
+                            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                            pressRetentionOffset={{ top: 20, bottom: 20, left: 20, right: 20 }}
+                    >
+                      <LinearGradient
+                              colors={['rgba(156,39,176,0.2)', 'rgba(0,255,136,0.2)']}
+                              style={styles.superGen3AuthForgotGradient}
+                            >
+                              <Ionicons name="key" size={quantumScale(16)} color="rgba(255,255,255,0.8)" />
+                              <Text style={styles.superGen3AuthForgotText}>🔐 Forgot Super Gen3 Password?</Text>
+                      </LinearGradient>
+                    </TouchableOpacity>
+                        </>
+                      ) : (
+                        <>
+                          {/* Age Verification Checkbox */}
+                          <View style={styles.ageVerificationContainer}>
+                            <TouchableOpacity
+                              style={styles.ageVerificationCheckbox}
+                              onPress={() => setIsAgeVerified(!isAgeVerified)}
+                              activeOpacity={0.7}
+                            >
+                              <View style={[
+                                styles.checkbox,
+                                isAgeVerified && styles.checkboxChecked
+                              ]}>
+                                {isAgeVerified && (
+                                  <Ionicons name="checkmark" size={quantumScale(16)} color="#fff" />
+                                )}
+                              </View>
+                              <Text style={styles.ageVerificationText}>
+                                I confirm that I am 18 years or older
+                              </Text>
+                            </TouchableOpacity>
+                          </View>
+
+                          {/* Super Gen3 Signup Button */}
+                  <TouchableOpacity
+                            style={styles.superGen3AuthSignupButton}
+                            onPress={handleSuperGen3Signup}
+                            disabled={isLoading}
+                            activeOpacity={0.8}
+                            hitSlop={{ top: 15, bottom: 15, left: 15, right: 15 }}
+                            pressRetentionOffset={{ top: 30, bottom: 30, left: 30, right: 30 }}
+                          >
+                            <LinearGradient
+                              colors={['#FF6B6B', '#00D4FF', '#FFD700', '#9C27B0']}
+                              style={styles.superGen3AuthSignupGradient}
+                            >
+                              <Ionicons name="add-circle" size={quantumScale(24)} color="#fff" />
+                              <Text style={styles.superGen3AuthSignupText}>
+                                🌟 CREATE SUPER GEN3 CONSCIOUSNESS
+                              </Text>
+                            </LinearGradient>
+                  </TouchableOpacity>
+                        </>
                       )}
                     </View>
 
-                    {/* Signup Type Selection */}
-                <View style={styles.signupOptions}>
+                    {/* Super Gen3 Mode Toggle */}
                   <TouchableOpacity
-                    style={[styles.signupType, !isArtistSignup && styles.signupTypeActive]}
-                    onPress={() => setIsArtistSignup(false)}
-                  >
-                        <Ionicons name="people" size={24} color={!isArtistSignup ? "#fff" : "#ccc"} />
-                    <Text style={[styles.signupTypeText, !isArtistSignup && styles.signupTypeTextActive]}>
-                          Fan/Creator
-                    </Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={[styles.signupType, isArtistSignup && styles.signupTypeActive]}
-                    onPress={() => setIsArtistSignup(true)}
-                  >
-                        <Ionicons name="musical-notes" size={24} color={isArtistSignup ? "#fff" : "#ccc"} />
-                    <Text style={[styles.signupTypeText, isArtistSignup && styles.signupTypeTextActive]}>
-                          Music Artist
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-                  </>
-              )}
-
-                {/* Remember Me & Forgot Password */}
-              {isLogin && (
-                <View style={styles.loginOptions}>
-                  <TouchableOpacity 
-                      style={styles.rememberMe}
-                    onPress={() => setRememberMe(!rememberMe)}
-                  >
-                      <Ionicons 
-                        name={rememberMe ? "checkbox" : "square-outline"} 
-                        size={20} 
-                        color="#fff" 
-                      />
-                      <Text style={styles.rememberMeText}>Remember me</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity onPress={handleForgotPassword}>
-                    <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
-                  </TouchableOpacity>
-                </View>
-              )}
-              
-                {/* Submit Button */}
-              <TouchableOpacity
-                style={[styles.submitButton, !canSubmit && styles.submitButtonDisabled]}
-                onPress={handleSubmit}
-                disabled={!canSubmit || isLoading}
-                >
+                      style={styles.superGen3AuthModeToggle}
+                      onPress={toggleAuthMode}
+                      activeOpacity={0.7}
+                      hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                      pressRetentionOffset={{ top: 20, bottom: 20, left: 20, right: 20 }}
+                    >
                   <LinearGradient
-                    colors={canSubmit ? ['#FF6B6B', '#4ECDC4'] : ['#666', '#999']}
-                    style={styles.submitGradient}
-              >
-                <Text style={styles.submitButtonText}>
-                      {isLoading ? 'Loading...' : (isLogin ? 'Sign In' : 'Create Account')}
-                </Text>
+                        colors={['rgba(0,255,136,0.2)', 'rgba(156,39,176,0.2)']}
+                        style={styles.superGen3AuthModeToggleGradient}
+                      >
+                        <Ionicons 
+                          name={isSignupMode ? "log-in" : "person-add"} 
+                          size={quantumScale(16)} 
+                          color="rgba(255,255,255,0.8)" 
+                        />
+                        <Text style={styles.superGen3AuthModeToggleText}>
+                          {isSignupMode ? '🔐 Switch to Neural Sync' : '🌟 Switch to Consciousness Creation'}
+                    </Text>
                   </LinearGradient>
                 </TouchableOpacity>
-
-                {/* Error Display */}
-                {error && (
-                  <View style={styles.errorContainer}>
-                    <Ionicons name="alert-circle" size={20} color="#FF6B6B" />
-                    <Text style={styles.errorText}>{error}</Text>
-                  </View>
-                )}
-
-                {/* Test Login Button */}
-                <TouchableOpacity
-                  style={styles.testLoginButton}
-                  onPress={handleTestLogin}
-                >
-                  <Text style={styles.testLoginText}>🔑 Test Account Login</Text>
-              </TouchableOpacity>
-
-                {/* Social Login */}
-                <View style={styles.socialLoginContainer}>
-                  <Text style={styles.socialLoginText}>Or continue with</Text>
-                <View style={styles.socialButtons}>
-                  <TouchableOpacity 
-                    style={styles.socialButton}
-                      onPress={() => handleSocialLogin('Apple')}
-                  >
-                      <Ionicons name="logo-apple" size={24} color="#fff" />
-                  </TouchableOpacity>
-                  <TouchableOpacity 
-                    style={styles.socialButton}
-                      onPress={() => handleSocialLogin('Google')}
-                  >
-                      <Ionicons name="logo-google" size={24} color="#fff" />
-                  </TouchableOpacity>
-                  <TouchableOpacity 
-                    style={styles.socialButton}
-                      onPress={() => handleSocialLogin('Facebook')}
-                  >
-                      <Ionicons name="logo-facebook" size={24} color="#fff" />
-                  </TouchableOpacity>
+                  </LinearGradient>
                 </View>
-              </View>
+              )}
 
-                {/* Terms and Privacy */}
-            {!isLogin && (
-                  <Text style={styles.termsText}>
-                    By signing up, you agree to our{' '}
-                    <Text style={styles.linkText}>Terms of Service</Text> and{' '}
-                    <Text style={styles.linkText}>Privacy Policy</Text>
-                </Text>
-                )}
-              </View>
-            </Animated.View>
-          </ScrollView>
-        </KeyboardAvoidingView>
+              {/* Super Gen3 Footer */}
+              <Animated.View style={[styles.footer, { opacity: fadeAnim }]}>
+                <Text style={styles.footerText}>SUPER GEN3 • Quantum • Neural • Revolutionary</Text>
+              </Animated.View>
+            </ScrollView>
+          </KeyboardAvoidingView>
+        </SafeAreaView>
       </LinearGradient>
-
-      {/* Music Onboarding Modal */}
-      <Modal
-        visible={showMusicOnboarding}
-        animationType="slide"
-        presentationStyle="pageSheet"
-      >
-        <LumaMusicOnboarding
-          onComplete={handleMusicOnboardingComplete}
-          onSkip={handleMusicOnboardingSkip}
-        />
-      </Modal>
-    </SafeAreaView>
+    </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
-  container: responsiveStyle({
+  container: {
     flex: 1,
-    backgroundColor: '#0a0a0a',
-  }),
-  gradient: {
+    backgroundColor: '#000',
+  },
+  background: {
+    flex: 1,
+  },
+  safeArea: {
     flex: 1,
   },
   keyboardView: {
@@ -548,356 +468,195 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     flexGrow: 1,
-    justifyContent: 'center',
+    paddingHorizontal: quantumScale(20),
+    paddingVertical: quantumScale(20),
   },
-  content: responsiveStyle({
-    flex: 1,
-    justifyContent: 'center',
-    paddingHorizontal: 30,
-  }),
-  logoContainer: responsiveStyle({
+  header: {
     alignItems: 'center',
-    marginBottom: 40,
-  }),
-  logoIcon: {
-    width: scale(80),
-    height: scale(80),
-    borderRadius: scale(40),
-    marginBottom: scale(16),
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 8,
+    marginBottom: quantumScale(40),
+  },
+  logoContainer: {
+    marginBottom: quantumScale(20),
   },
   logoGradient: {
-    width: '100%',
-    height: '100%',
-    borderRadius: scale(40),
+    width: quantumScale(80),
+    height: quantumScale(80),
+    borderRadius: quantumScale(40),
+    alignItems: 'center',
     justifyContent: 'center',
-    alignItems: 'center',
   },
-  logoText: {
-    fontSize: scale(36),
+  appName: {
+    fontSize: quantumScale(32),
     fontWeight: 'bold',
     color: '#fff',
+    marginBottom: quantumScale(8),
   },
-  logo: responsiveStyle({
-    width: 120,
-    height: 120,
-    marginBottom: 20,
-  }),
+  appVersion: {
+    fontSize: quantumScale(18),
+    color: '#00D4FF',
+    fontWeight: 'bold',
+    marginBottom: quantumScale(8),
+  },
   tagline: {
-    fontSize: scale(18),
-    color: '#fff',
+    fontSize: quantumScale(16),
+    color: 'rgba(255,255,255,0.7)',
     textAlign: 'center',
-    marginBottom: scale(4),
-    fontWeight: '600',
   },
-  subtitle: responsiveStyle({
-    fontSize: 16,
-    color: '#888',
-    textAlign: 'center',
-    marginBottom: 40,
-  }),
-  title: responsiveStyle({
-    fontSize: 32,
+  
+  // Super Gen3 Authentication Styles
+  superGen3AuthContainer: {
+    marginBottom: quantumScale(20),
+  },
+  superGen3AuthGradient: {
+    borderRadius: quantumScale(16),
+    padding: quantumScale(20),
+    borderWidth: 2,
+    borderColor: 'rgba(0,255,136,0.5)',
+  },
+  superGen3AuthTitle: {
+    fontSize: quantumScale(28),
     fontWeight: 'bold',
-    color: '#FFD700',
+    color: '#fff',
     textAlign: 'center',
-    marginBottom: 10,
-  }),
-  tabContainer: {
-    flexDirection: 'row',
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    borderRadius: scale(12),
-    padding: scale(4),
-    marginBottom: scale(24),
+    marginBottom: quantumScale(8),
+    textShadowColor: '#00FF88',
+    textShadowOffset: { width: 0, height: 0 },
+    textShadowRadius: quantumScale(8),
   },
-  tab: {
-    flex: 1,
-    paddingVertical: scale(12),
-    alignItems: 'center',
-    borderRadius: scale(8),
+  superGen3AuthSubtitle: {
+    fontSize: quantumScale(16),
+    color: 'rgba(255,255,255,0.8)',
+    textAlign: 'center',
+    marginBottom: quantumScale(20),
+    lineHeight: quantumScale(22),
   },
-  activeTab: {
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+  superGen3AuthForm: {
+    gap: quantumScale(16),
   },
-  tabText: {
-    fontSize: scale(16),
-    fontWeight: '600',
-    color: '#ccc',
+  superGen3AuthInputContainer: {
+    marginBottom: quantumScale(12),
   },
-  activeTabText: {
-    color: '#fff',
-  },
-  formContainer: responsiveStyle({
-    marginBottom: 30,
-  }),
-  inputGroup: {
+  superGen3AuthInputGradient: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    borderRadius: scale(12),
-    marginBottom: scale(16),
-    paddingHorizontal: scale(16),
-    paddingVertical: scale(4),
-  },
-  inputIcon: {
-    marginRight: scale(12),
-  },
-  input: responsiveStyle({
-    backgroundColor: '#1a1a1a',
-    borderRadius: 12,
-    paddingHorizontal: 20,
-    paddingVertical: 15,
-    fontSize: 16,
-    color: '#fff',
+    padding: quantumScale(16),
+    borderRadius: quantumScale(12),
     borderWidth: 1,
-    borderColor: '#333',
-  }),
-  inputFocused: responsiveStyle({
-    borderColor: '#FFD700',
-  }),
-  passwordToggle: {
-    padding: scale(8),
+    borderColor: 'rgba(255,255,255,0.2)',
+    gap: quantumScale(12),
+  },
+  superGen3AuthInput: {
+    flex: 1,
+    fontSize: quantumScale(16),
+    color: '#fff',
+    paddingVertical: quantumScale(8),
+  },
+  superGen3AuthEyeButton: {
+    padding: quantumScale(4),
+  },
+  superGen3AuthLoginButton: {
+    marginTop: quantumScale(8),
+  },
+  superGen3AuthLoginGradient: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: quantumScale(16),
+    borderRadius: quantumScale(12),
+    gap: quantumScale(12),
+  },
+  superGen3AuthLoginText: {
+    fontSize: quantumScale(18),
+    fontWeight: 'bold',
+    color: '#fff',
+    textAlign: 'center',
+  },
+  superGen3AuthForgotButton: {
+    marginTop: quantumScale(12),
+  },
+  superGen3AuthForgotGradient: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: quantumScale(12),
+    borderRadius: quantumScale(8),
+    gap: quantumScale(8),
+  },
+  superGen3AuthForgotText: {
+    fontSize: quantumScale(14),
+    color: 'rgba(255,255,255,0.8)',
+    textAlign: 'center',
+  },
+  superGen3AuthSignupButton: {
+    marginTop: quantumScale(8),
+  },
+  superGen3AuthSignupGradient: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: quantumScale(16),
+    borderRadius: quantumScale(12),
+    gap: quantumScale(12),
+  },
+  superGen3AuthSignupText: {
+    fontSize: quantumScale(16),
+    fontWeight: 'bold',
+    color: '#fff',
+    textAlign: 'center',
+  },
+  superGen3AuthModeToggle: {
+    marginTop: quantumScale(16),
+  },
+  superGen3AuthModeToggleGradient: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: quantumScale(12),
+    borderRadius: quantumScale(8),
+    gap: quantumScale(8),
+  },
+  superGen3AuthModeToggleText: {
+    fontSize: quantumScale(14),
+    color: 'rgba(255,255,255,0.8)',
+    textAlign: 'center',
+  },
+  footer: {
+    alignItems: 'center',
+    marginTop: quantumScale(40),
+  },
+  footerText: {
+    fontSize: quantumScale(14),
+    color: 'rgba(255,255,255,0.5)',
+    textAlign: 'center',
   },
   ageVerificationContainer: {
-    marginBottom: scale(16),
+    marginVertical: quantumScale(16),
+    paddingHorizontal: quantumScale(20),
   },
-  verifyButton: {
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    padding: scale(8),
-    borderRadius: scale(8),
-  },
-  verifiedButton: {
-    backgroundColor: '#4CAF50',
-  },
-  verifiedText: {
-    color: '#4CAF50',
-    fontSize: scale(12),
-    textAlign: 'center',
-    marginTop: scale(4),
-  },
-  signupOptions: {
+  ageVerificationCheckbox: {
     flexDirection: 'row',
-    marginBottom: scale(24),
-    gap: scale(12),
-  },
-  signupType: {
-    flex: 1,
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    borderRadius: scale(12),
-    padding: scale(16),
     alignItems: 'center',
+    paddingVertical: quantumScale(12),
+  },
+  checkbox: {
+    width: quantumScale(20),
+    height: quantumScale(20),
     borderWidth: 2,
-    borderColor: 'transparent',
-  },
-  signupTypeActive: {
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    borderColor: '#fff',
-  },
-  signupTypeText: {
-    color: '#ccc',
-    fontSize: scale(14),
-    fontWeight: '600',
-    marginTop: scale(8),
-  },
-  signupTypeTextActive: {
-    color: '#fff',
-  },
-  loginOptions: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    borderColor: 'rgba(255,255,255,0.6)',
+    borderRadius: quantumScale(4),
+    marginRight: quantumScale(12),
     alignItems: 'center',
-    marginBottom: scale(24),
-  },
-  rememberMe: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  rememberMeText: {
-    color: '#fff',
-    marginLeft: scale(8),
-    fontSize: scale(14),
-  },
-  forgotPasswordText: {
-    color: '#fff',
-    fontSize: scale(14),
-    textDecorationLine: 'underline',
-  },
-  submitButton: {
-    borderRadius: scale(12),
-    marginBottom: scale(16),
-    overflow: 'hidden',
-  },
-  submitButtonDisabled: {
-    opacity: 0.6,
-  },
-  submitGradient: {
-    paddingVertical: scale(16),
-    alignItems: 'center',
-  },
-  submitButtonText: {
-    color: '#fff',
-    fontSize: scale(16),
-    fontWeight: 'bold',
-  },
-  errorContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: 'rgba(255, 107, 107, 0.2)',
-    borderRadius: scale(8),
-    padding: scale(12),
-    marginBottom: scale(16),
-  },
-  errorText: responsiveStyle({
-    color: '#ff4444',
-    fontSize: 14,
-    marginTop: 5,
-    marginLeft: 5,
-  }),
-  testLoginButton: {
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    borderRadius: scale(8),
-    padding: scale(12),
-    alignItems: 'center',
-    marginBottom: scale(24),
-  },
-  testLoginText: {
-    color: '#fff',
-    fontSize: scale(14),
-  },
-  socialLoginContainer: {
-    alignItems: 'center',
-    marginBottom: scale(24),
-  },
-  socialLoginText: {
-    color: '#fff',
-    fontSize: scale(14),
-    marginBottom: scale(16),
-  },
-  socialButtons: responsiveStyle({
-    flexDirection: 'row',
     justifyContent: 'center',
-    gap: 15,
-  }),
-  socialButton: responsiveStyle({
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    backgroundColor: '#1a1a1a',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#333',
-  }),
-  termsText: {
-    color: '#fff',
-    fontSize: scale(12),
-    textAlign: 'center',
-    opacity: 0.8,
-  },
-  linkText: {
-    textDecorationLine: 'underline',
-    fontWeight: '600',
-  },
-  divider: responsiveStyle({
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginVertical: 20,
-  }),
-  dividerLine: responsiveStyle({
-    flex: 1,
-    height: 1,
-    backgroundColor: '#333',
-  }),
-  dividerText: responsiveStyle({
-    color: '#888',
-    fontSize: 14,
-    marginHorizontal: 15,
-  }),
-  buttonContainer: responsiveStyle({
-    marginBottom: 20,
-  }),
-  primaryButton: responsiveStyle({
-    backgroundColor: '#FFD700',
-    borderRadius: 12,
-    paddingVertical: 15,
-    alignItems: 'center',
-    marginBottom: 15,
-  }),
-  primaryButtonText: responsiveStyle({
-    color: '#000',
-    fontSize: 16,
-    fontWeight: 'bold',
-  }),
-  secondaryButton: responsiveStyle({
     backgroundColor: 'transparent',
-    borderRadius: 12,
-    paddingVertical: 15,
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#FFD700',
-  }),
-  secondaryButtonText: responsiveStyle({
-    color: '#FFD700',
-    fontSize: 16,
-    fontWeight: 'bold',
-  }),
-  ageVerificationModal: responsiveStyle({
+  },
+  checkboxChecked: {
+    backgroundColor: '#FF6B6B',
+    borderColor: '#FF6B6B',
+  },
+  ageVerificationText: {
+    fontSize: quantumScale(14),
+    color: 'rgba(255,255,255,0.9)',
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.8)',
-  }),
-  modalContent: responsiveStyle({
-    backgroundColor: '#1a1a1a',
-    borderRadius: 20,
-    padding: 25,
-    marginHorizontal: 20,
-    alignItems: 'center',
-  }),
-  modalTitle: responsiveStyle({
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#FFD700',
-    textAlign: 'center',
-    marginBottom: 15,
-  }),
-  modalText: responsiveStyle({
-    fontSize: 16,
-    color: '#fff',
-    textAlign: 'center',
-    marginBottom: 20,
-    lineHeight: 24,
-  }),
-  modalButtons: responsiveStyle({
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    width: '100%',
-  }),
-  modalButton: responsiveStyle({
-    paddingVertical: 12,
-    paddingHorizontal: 20,
-    borderRadius: 8,
-    minWidth: 100,
-  }),
-  confirmButton: responsiveStyle({
-    backgroundColor: '#FFD700',
-  }),
-  cancelButton: responsiveStyle({
-    backgroundColor: '#ff4444',
-  }),
-  buttonText: responsiveStyle({
-    fontSize: 16,
-    fontWeight: 'bold',
-    textAlign: 'center',
-  }),
-  confirmText: responsiveStyle({
-    color: '#000',
-  }),
-  cancelText: responsiveStyle({
-    color: '#fff',
-  }),
+    lineHeight: quantumScale(20),
+  },
 }); 
