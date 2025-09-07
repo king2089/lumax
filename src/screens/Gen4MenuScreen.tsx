@@ -42,12 +42,39 @@ export const Gen4MenuScreen: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [showSearch, setShowSearch] = useState(false);
   const [filteredFeatures, setFilteredFeatures] = useState<any[]>([]);
+  const [countdown, setCountdown] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
   
   // Gen4 Enhanced Animations
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(50)).current;
   const pulseAnim = useRef(new Animated.Value(1)).current;
   const quantumFieldAnim = useRef(new Animated.Value(0)).current;
+
+  // Countdown timer to 09/25/2025
+  useEffect(() => {
+    const targetDate = new Date('2025-09-25T00:00:00Z').getTime();
+    
+    const updateCountdown = () => {
+      const now = new Date().getTime();
+      const difference = targetDate - now;
+      
+      if (difference > 0) {
+        const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((difference % (1000 * 60)) / 1000);
+        
+        setCountdown({ days, hours, minutes, seconds });
+      } else {
+        setCountdown({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+      }
+    };
+    
+    updateCountdown();
+    const interval = setInterval(updateCountdown, 1000);
+    
+    return () => clearInterval(interval);
+  }, []);
   const searchAnim = useRef(new Animated.Value(0)).current;
   const statsAnim = useRef(new Animated.Value(0)).current;
 
@@ -133,10 +160,12 @@ export const Gen4MenuScreen: React.FC = () => {
         { name: 'Luma AI', category: 'featured', description: 'Advanced AI Assistant' },
         { name: 'Neural Music Studio', category: 'featured', description: 'AI-powered music creation' },
         { name: 'Luma Partnership Program', category: 'featured', description: 'Post NSFW videos & get paid' },
-        { name: 'Quantum Computing', category: 'upcoming', description: 'Next-gen processing' },
-        { name: 'Holographic Display', category: 'upcoming', description: '3D immersive experiences' },
-        { name: 'AI Hologram Chat', category: 'upcoming', description: '3D holographic AI conversations' },
-        { name: 'Time Travel Posts', category: 'upcoming', description: 'Send messages to past/future' },
+        { name: 'Quantum Computing', category: 'upcoming', description: 'Next-gen processing', countdown: true },
+        { name: 'Holographic Display', category: 'upcoming', description: '3D immersive experiences', countdown: true },
+        { name: 'AI Hologram Chat', category: 'upcoming', description: '3D holographic AI conversations', countdown: true },
+        { name: 'Time Travel Posts', category: 'upcoming', description: 'Send messages to past/future', countdown: true },
+        { name: 'Neural Interface', category: 'upcoming', description: 'Direct brain-computer interface', countdown: true },
+        { name: 'Reality Warping', category: 'upcoming', description: 'Bend reality to your will', countdown: true },
         { name: 'Developer Tools', category: 'tools', description: 'Advanced development tools' },
         { name: 'System Monitor', category: 'tools', description: 'Performance monitoring' },
       ];
@@ -414,9 +443,15 @@ export const Gen4MenuScreen: React.FC = () => {
             <View style={[styles.featureBadge, styles.comingSoonBadge]}>
               <Text style={styles.comingSoonBadgeText}>SOON</Text>
             </View>
-            <Ionicons name="infinite" size={quantumScale(32)} color="#fff" />
+            <Ionicons name="infinite" size={quantumScale(24)} color="#fff" />
             <Text style={styles.featureTitle}>Quantum Computing</Text>
             <Text style={styles.featureDescription}>Next-Gen Processing</Text>
+            <View style={styles.countdownContainer}>
+              <Text style={styles.countdownText}>
+                {countdown.days}d {countdown.hours}h {countdown.minutes}m {countdown.seconds}s
+              </Text>
+              <Text style={styles.countdownLabel}>Until Launch</Text>
+            </View>
           </LinearGradient>
         </TouchableOpacity>
 
@@ -428,9 +463,15 @@ export const Gen4MenuScreen: React.FC = () => {
             colors={['#9C27B0', '#6A1B9A']}
             style={styles.featureGradient}
           >
-            <Ionicons name="cube" size={quantumScale(32)} color="#fff" />
+            <Ionicons name="cube" size={quantumScale(24)} color="#fff" />
             <Text style={styles.featureTitle}>Holographic</Text>
             <Text style={styles.featureDescription}>3D Immersion</Text>
+            <View style={styles.countdownContainer}>
+              <Text style={styles.countdownText}>
+                {countdown.days}d {countdown.hours}h {countdown.minutes}m {countdown.seconds}s
+              </Text>
+              <Text style={styles.countdownLabel}>Until Launch</Text>
+            </View>
           </LinearGradient>
         </TouchableOpacity>
 
@@ -474,9 +515,15 @@ export const Gen4MenuScreen: React.FC = () => {
             <View style={[styles.featureBadge, styles.gen2Badge]}>
               <Text style={styles.gen2BadgeText}>GEN2</Text>
             </View>
-            <Ionicons name="cube" size={quantumScale(32)} color="#fff" />
+            <Ionicons name="cube" size={quantumScale(24)} color="#fff" />
             <Text style={styles.featureTitle}>AI Hologram</Text>
             <Text style={styles.featureDescription}>3D AI Chat</Text>
+            <View style={styles.countdownContainer}>
+              <Text style={styles.countdownText}>
+                {countdown.days}d {countdown.hours}h {countdown.minutes}m {countdown.seconds}s
+              </Text>
+              <Text style={styles.countdownLabel}>Until Launch</Text>
+            </View>
           </LinearGradient>
         </TouchableOpacity>
 
@@ -508,9 +555,15 @@ export const Gen4MenuScreen: React.FC = () => {
             <View style={[styles.featureBadge, styles.gen2Badge]}>
               <Text style={styles.gen2BadgeText}>GEN2</Text>
             </View>
-            <Ionicons name="bulb" size={quantumScale(32)} color="#fff" />
+            <Ionicons name="bulb" size={quantumScale(24)} color="#fff" />
             <Text style={styles.featureTitle}>Neural Control</Text>
             <Text style={styles.featureDescription}>Mind Control</Text>
+            <View style={styles.countdownContainer}>
+              <Text style={styles.countdownText}>
+                {countdown.days}d {countdown.hours}h {countdown.minutes}m {countdown.seconds}s
+              </Text>
+              <Text style={styles.countdownLabel}>Until Launch</Text>
+            </View>
           </LinearGradient>
         </TouchableOpacity>
 
@@ -525,9 +578,15 @@ export const Gen4MenuScreen: React.FC = () => {
             <View style={[styles.featureBadge, styles.comingSoonBadge]}>
               <Text style={styles.comingSoonBadgeText}>Q4 2025</Text>
             </View>
-            <Ionicons name="time" size={quantumScale(32)} color="#fff" />
+            <Ionicons name="time" size={quantumScale(24)} color="#fff" />
             <Text style={styles.featureTitle}>Time Travel</Text>
             <Text style={styles.featureDescription}>Past & Future</Text>
+            <View style={styles.countdownContainer}>
+              <Text style={styles.countdownText}>
+                {countdown.days}d {countdown.hours}h {countdown.minutes}m {countdown.seconds}s
+              </Text>
+              <Text style={styles.countdownLabel}>Until Launch</Text>
+            </View>
           </LinearGradient>
         </TouchableOpacity>
 
@@ -559,9 +618,15 @@ export const Gen4MenuScreen: React.FC = () => {
             <View style={[styles.featureBadge, styles.comingSoonBadge]}>
               <Text style={styles.comingSoonBadgeText}>Q2 2026</Text>
             </View>
-            <Ionicons name="sparkles" size={quantumScale(32)} color="#fff" />
+            <Ionicons name="sparkles" size={quantumScale(24)} color="#fff" />
             <Text style={styles.featureTitle}>Reality Bend</Text>
             <Text style={styles.featureDescription}>Physics Break</Text>
+            <View style={styles.countdownContainer}>
+              <Text style={styles.countdownText}>
+                {countdown.days}d {countdown.hours}h {countdown.minutes}m {countdown.seconds}s
+              </Text>
+              <Text style={styles.countdownLabel}>Until Launch</Text>
+            </View>
           </LinearGradient>
         </TouchableOpacity>
 
@@ -1245,6 +1310,14 @@ export const Gen4MenuScreen: React.FC = () => {
                   >
                     <Text style={styles.searchResultName}>{feature.name}</Text>
                     <Text style={styles.searchResultDescription}>{feature.description}</Text>
+                    {feature.countdown && (
+                      <View style={styles.countdownContainer}>
+                        <Text style={styles.countdownText}>
+                          {countdown.days}d {countdown.hours}h {countdown.minutes}m {countdown.seconds}s
+                        </Text>
+                        <Text style={styles.countdownLabel}>Until Launch</Text>
+                      </View>
+                    )}
                     <View style={styles.searchResultCategory}>
                       <Text style={styles.searchResultCategoryText}>{feature.category}</Text>
                     </View>
@@ -1767,6 +1840,26 @@ const styles = StyleSheet.create({
     fontSize: quantumScale(8),
     fontWeight: 'bold',
     color: '#fff',
+  },
+  countdownContainer: {
+    alignItems: 'center',
+    marginTop: quantumScale(4),
+    paddingVertical: quantumScale(2),
+    paddingHorizontal: quantumScale(4),
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
+    borderRadius: quantumScale(6),
+  },
+  countdownText: {
+    fontSize: quantumScale(8),
+    fontWeight: 'bold',
+    color: '#00D4FF',
+    textAlign: 'center',
+  },
+  countdownLabel: {
+    fontSize: quantumScale(6),
+    color: 'rgba(255, 255, 255, 0.7)',
+    textAlign: 'center',
+    marginTop: quantumScale(1),
   },
 });
 
